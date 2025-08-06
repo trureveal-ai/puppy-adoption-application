@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puppy Adoption Application</title>
+    <style>
+        /* 1. Import Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Lato:wght@400;700&family=Pacifico&display=swap');
+
+        /* 2. Scoped CSS Variables and Base Styles */
+        #adoption-app-container {
+            /* Color Palette & Fonts from Doodle Matchmaker */
+            --primary-color: #8D7B68;
+            --secondary-color: #A4907C;
+            --accent-color: #C8B6A6;
+            --text-color: #3C2A21;
+            --white-color: #FFFFFF;
+            --app-background: #fdfaf6;
+            --font-title: 'Pacifico', cursive;
+            --font-primary: 'Poppins', sans-serif;
+            --font-secondary: 'Lato', sans-serif;
+            --danger-color: #b91c1c;
+            --danger-background: #fee2e2;
+
+            /* Base Container Styles */
+            font-family: var(--font-secondary);
+            color: var(--text-color);
+            background-color: var(--white-color);
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            width: 100%;
+            max-width: 768px; /* Standard max-width for readability */
+            margin: 1rem auto;
+            box-sizing: border-box;
+        }
+
+        /* Basic reset scoped to the app */
+        #adoption-app-container *, #adoption-app-container *::before, #adoption-app-container *::after {
+            box-sizing: inherit;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 3. Header Styling */
+        .app-header {
+            padding: 2.5rem 2rem;
+            background-color: var(--secondary-color);
+            color: var(--white-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .app-header h1 {
+            font-family: var(--font-title);
+            font-size: 2.75rem;
+            font-weight: 400;
+            margin-bottom: 0.75rem;
+            text-align: center;
+        }
+        .app-header p {
+            opacity: 0.9;
+            max-width: 600px;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        /* 4. Main Content & Form Styling */
+        .app-main {
+            padding: 2rem 1.5rem;
+            background-color: var(--app-background);
+        }
+
+        #adoption-form {
+            background-color: var(--white-color);
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        fieldset {
+            border: none;
+            margin-bottom: 2.5rem;
+        }
+
+        legend {
+            font-family: var(--font-primary);
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--accent-color);
+            width: 100%;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Form element styling */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--accent-color);
+            border-radius: 0.375rem;
+            font-family: var(--font-secondary);
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(141, 123, 104, 0.2);
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        /* Radio button styling */
+        .radio-group {
+            margin-top: 0.5rem;
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .radio-label {
+            display: inline-flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        .form-radio {
+            -webkit-appearance: none;
+            appearance: none;
+            background-color: #fff;
+            margin-right: 0.5rem;
+            font: inherit;
+            color: var(--accent-color);
+            width: 1.15em;
+            height: 1.15em;
+            border: 0.15em solid var(--accent-color);
+            border-radius: 50%;
+            transform: translateY(-0.075em);
+            display: grid;
+            place-content: center;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        .form-radio::before {
+            content: "";
+            width: 0.65em;
+            height: 0.65em;
+            border-radius: 50%;
+            transform: scale(0);
+            transition: 120ms transform ease-in-out;
+            box-shadow: inset 1em 1em var(--primary-color);
+        }
+        .form-radio:checked {
+            border-color: var(--primary-color);
+            background-color: var(--white-color);
+        }
+        .form-radio:checked::before {
+            transform: scale(1);
+        }
+
+        /* Agreement Checkbox */
+        .agreement-section {
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--accent-color);
+        }
+        .checkbox-label {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+        .form-checkbox {
+             margin-top: 0.2em;
+        }
+        .agreement-text {
+            font-size: 0.875rem;
+            line-height: 1.5;
+            color: var(--text-color);
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: var(--white-color);
+            font-family: var(--font-primary);
+            font-weight: 700;
+            font-size: 1.125rem;
+            padding: 0.875rem 1.5rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 2rem;
+        }
+        .submit-btn:hover {
+            background-color: var(--text-color);
+            transform: translateY(-2px);
+        }
+
+        /* Footer Styling */
+        .app-footer {
+            background-color: var(--text-color);
+            padding: 1.5rem;
+            text-align: center;
+            color: var(--white-color);
+        }
+        .app-footer p {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        /* Responsive Design */
+        @media (min-width: 768px) {
+            .app-header h1 {
+                font-size: 3.25rem;
+            }
+            .app-main {
+                padding: 2.5rem;
+            }
+            .grid-layout {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div id="adoption-app-container">
+
+    <header class="app-header">
+        <h1>Puppy Adoption Application</h1>
+        <p>
+            Thank you for your interest in giving one of our puppies a forever home. This application is a crucial first step for us to get to know you and help us match you with the right puppy.
+        </p>
+    </header>
+
+    <main class="app-main">
+        <!-- The form now points to your Formspree endpoint -->
+        <form id="adoption-form" action="https://formspree.io/f/manbprdq" method="POST">
+
+            <!-- Section 1: About Your Household & Home -->
+            <fieldset>
+                <legend>Section 1: Your Household & Home</legend>
+                <div class="form-group">
+                    <label for="full-name" class="form-label">Full Name(s)</label>
+                    <input type="text" id="full-name" name="Full Name" class="form-input" placeholder="e.g., Jane Doe & John Smith" required>
+                </div>
+                <div class="form-group">
+                    <label for="location" class="form-label">City & State of Residence</label>
+                    <input type="text" id="location" name="Location" class="form-input" placeholder="e.g., Denver, CO" required>
+                </div>
+                <div class="grid-layout">
+                    <div class="form-group">
+                        <label for="phone" class="form-label">Phone Number</label>
+                        <input type="tel" id="phone" name="Phone Number" class="form-input" placeholder="e.g., (555) 123-4567" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email</label>
+                        <!-- The name="_replyto" allows you to reply directly to the applicant from your email -->
+                        <input type="email" id="email" name="_replyto" class="form-input" placeholder="e.g., youremail@example.com" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="household-members" class="form-label">Please list all members of your household and their ages</label>
+                    <textarea id="household-members" name="Household Members" rows="3" class="form-textarea" placeholder="e.g., Two adults (32, 35), one child (8)" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="home-type" class="form-label">What type of home do you live in?</label>
+                    <input type="text" id="home-type" name="Home Type" placeholder="e.g., House, Apartment, Townhome" class="form-input" required>
+                </div>
+                <div class="grid-layout">
+                    <div class="form-group">
+                        <label class="form-label">Do you own or rent?</label>
+                        <div class="radio-group">
+                            <label class="radio-label"><input type="radio" name="own-rent" value="Own" class="form-radio" required> <span>Own</span></label>
+                            <label class="radio-label"><input type="radio" name="own-rent" value="Rent" class="form-radio"> <span>Rent</span></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="fenced-yard" class="form-label">Do you have a securely fenced yard?</label>
+                        <input type="text" id="fenced-yard" name="Fenced Yard" placeholder="e.g., Yes, 6ft wood privacy fence" class="form-input" required>
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Section 2: Lifestyle -->
+            <fieldset>
+                <legend>Section 2: Lifestyle & A Dog's Daily Life</legend>
+                <div class="form-group">
+                    <label for="hours-alone" class="form-label">On a typical workday, how many hours would the puppy be left alone?</label>
+                    <input type="text" id="hours-alone" name="Hours Alone" class="form-input" placeholder="e.g., 4-5 hours, with a midday break" required>
+                </div>
+                <div class="form-group">
+                    <label for="where-alone" class="form-label">Where will the puppy spend its time when home alone?</label>
+                    <input type="text" id="where-alone" name="Where Alone" placeholder="e.g., Crate, puppy-proofed room" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="activity-level" class="form-label">What is your household's general activity level?</label>
+                    <input type="text" id="activity-level" name="Activity Level" placeholder="e.g., Moderately active, daily walks and weekend hikes" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="dog-history" class="form-label">Have you owned a dog before as an adult? If so, what breed(s)?</label>
+                    <input type="text" id="dog-history" name="Dog History" class="form-input" placeholder="e.g., Yes, a Golden Retriever for 12 years" required>
+                </div>
+            </fieldset>
+
+            <!-- Section 3: Breed-Specific Questions -->
+            <fieldset>
+                <legend>Section 3: Breed-Specific Questions</legend>
+                <div class="form-group">
+                    <label class="form-label">Our puppies' coats require professional grooming every 6-8 weeks. Are you prepared for this lifelong time and financial commitment?</label>
+                    <div class="radio-group">
+                        <label class="radio-label"><input type="radio" name="grooming-commitment" value="Yes" class="form-radio" required> <span>Yes</span></label>
+                        <label class="radio-label"><input type="radio" name="grooming-commitment" value="No" class="form-radio"> <span>No</span></label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="mental-stimulation" class="form-label">How do you plan to provide mental stimulation (e.g., puzzle toys, training games)?</label>
+                    <textarea id="mental-stimulation" name="Mental Stimulation Plan" rows="3" class="form-textarea" placeholder="e.g., Daily training sessions, puzzle feeders, snuffle mats..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="social-interaction" class="form-label">What is your plan for ensuring the puppy has enough social interaction?</label>
+                    <textarea id="social-interaction" name="Social Interaction Plan" rows="3" class="form-textarea" placeholder="e.g., Puppy socialization classes, visits with friends' dogs, trips to dog-friendly places..." required></textarea>
+                </div>
+            </fieldset>
+
+            <!-- Section 4: Training & Long-Term Care -->
+            <fieldset>
+                <legend>Section 4: Training & Long-Term Care</legend>
+                <div class="form-group">
+                    <label for="training-methods" class="form-label">What training methods do you plan to use? (We advocate for positive reinforcement.)</label>
+                    <input type="text" id="training-methods" name="Training Methods" class="form-input" placeholder="e.g., Puppy classes, positive reinforcement with treats and praise" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Are you prepared for the initial challenges of a new puppy (e.g., sleepless nights, house-training, chewing)?</label>
+                    <div class="radio-group">
+                        <label class="radio-label"><input type="radio" name="puppy-challenges" value="Yes" class="form-radio" required> <span>Yes</span></label>
+                        <label class="radio-label"><input type="radio" name="puppy-challenges" value="No" class="form-radio"> <span>No</span></label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Are you prepared for routine and emergency veterinary costs?</label>
+                    <div class="radio-group">
+                        <label class="radio-label"><input type="radio" name="vet-costs" value="Yes" class="form-radio" required> <span>Yes</span></label>
+                        <label class="radio-label"><input type="radio" name="vet-costs" value="No" class="form-radio"> <span>No</span></label>
+                        <label class="radio-label"><input type="radio" name="vet-costs" value="Considering Insurance" class="form-radio"> <span>Considering Insurance</span></label>
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Section 5: Final Thoughts -->
+            <fieldset>
+                <legend>Section 5: Final Thoughts</legend>
+                <div class="form-group">
+                    <label for="why-us" class="form-label">What attracts you to our puppies and what makes your home a great fit?</label>
+                    <textarea id="why-us" name="Why Us" rows="4" class="form-textarea" placeholder="e.g., We're looking for a friendly, medium-energy family dog. With our fenced yard and active lifestyle, we feel we can provide a great home." required></textarea>
+                </div>
+            </fieldset>
+
+            <!-- Agreement & Submission -->
+            <div class="agreement-section">
+                <div class="form-group">
+                     <label class="checkbox-label">
+                        <input id="agreement" name="agreement" type="checkbox" class="form-checkbox" required>
+                        <span class="agreement-text">
+                            I certify that my answers are true and complete. I understand that if I am chosen to adopt a puppy, I will be required to sign a contract that includes a strict spay/neuter agreement and a return-to-breeder clause.
+                        </span>
+                    </label>
+                </div>
+                <button type="submit" class="submit-btn">Submit Application</button>
+            </div>
+        </form>
+    </main>
+
+    <footer class="app-footer">
+        <p>&copy; 2024 TruReveal Digital. All Rights Reserved.</p>
+    </footer>
+
+    <!-- The custom modal and script are no longer needed, so they have been removed. -->
+
+</div>
+
+</body>
+</html>
